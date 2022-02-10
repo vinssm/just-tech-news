@@ -1,5 +1,9 @@
 const router = require('express').Router();
+<<<<<<< HEAD:routes/api/comment-routes.js
 const { User, Post, Comment } = require('../../models');
+=======
+const { Comment } = require('../../models');
+>>>>>>> develop:controllers/api/comment-routes.js
 const withAuth = require('../../utils/auth');
 
 router.get('/', (req, res) => {
@@ -29,6 +33,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', withAuth, (req, res) => {
+<<<<<<< HEAD:routes/api/comment-routes.js
     // check the session
     if (req.session) {
         Comment.create({
@@ -49,6 +54,33 @@ router.delete('/:id', withAuth, (req, res) => {
         where: {
             id: req.params.id
         }
+=======
+  // expects => {comment_text: "This is the comment", user_id: 1, post_id: 2}
+  Comment.create({
+    comment_text: req.body.comment_text,
+    user_id: req.session.user_id,
+    post_id: req.body.post_id
+  })
+    .then(dbCommentData => res.json(dbCommentData))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+});
+
+router.delete('/:id', withAuth, (req, res) => {
+  Comment.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(dbCommentData => {
+      if (!dbCommentData) {
+        res.status(404).json({ message: 'No comment found with this id!' });
+        return;
+      }
+      res.json(dbCommentData);
+>>>>>>> develop:controllers/api/comment-routes.js
     })
         .then(dbUserData => {
             if (!dbUserData) {
